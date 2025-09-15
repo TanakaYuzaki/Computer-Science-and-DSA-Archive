@@ -1,0 +1,69 @@
+r,c = map(int, input().split())
+Map = []
+for i in range(r):
+    temp_row = list(map(int,input().split()))
+    Map.append(temp_row)
+    
+DP_1 = [[0 for i in range(c)] for j in range(r)]
+DP_2 = [[0 for i in range(c)] for j in range(r)]
+DP_3 = [[0 for i in range(c)] for j in range(r)]
+DP_4 = [[0 for i in range(c)] for j in range(r)]
+result = 0
+DP_1[0][0] = Map[0][0]
+DP_2[-1][-1] = Map[-1][-1]
+DP_3[-1][0] = Map[-1][0]
+DP_4[0][-1] = Map[0][-1]
+#first loop
+for i in range(r):
+    for j in range(c):
+        if i == 0 and j == 0:
+            continue
+        elif i == 0:
+            DP_1[i][j] = Map[i][j] + DP_1[i][j-1]
+        elif j == 0:
+            DP_1[i][j] = Map[i][j] + DP_1[i-1][j]
+        else:
+            DP_1[i][j] = Map[i][j] + max(DP_1[i][j-1],DP_1[i-1][j])
+
+for i in range(r-1,-1,-1):
+    for j in range(c-1,-1,-1):
+        if i == r-1 and j == c-1:
+            continue
+        elif i == r-1:
+            DP_2[i][j] = Map[i][j] + DP_2[i][j+1]
+        elif j == c-1:
+            DP_2[i][j] = Map[i][j] + DP_2[i+1][j]
+        else:
+            DP_2[i][j] = Map[i][j] + max(DP_2[i][j+1],DP_2[i+1][j])
+
+for i in range(r-1,-1,-1):
+    for j in range(c):
+        if i == r-1 and j == 0:
+            continue
+        elif i == r-1:
+            DP_3[i][j] = Map[i][j] + DP_3[i][j-1]
+        elif j == 0:
+            DP_3[i][j] = Map[i][j] + DP_3[i+1][j]
+        else:
+            DP_3[i][j] = Map[i][j] + max(DP_3[i][j-1],DP_3[i+1][j])
+
+for i in range(r):
+    for j in range(c-1,-1,-1):
+        if i == 0 and j == c-1:
+            continue
+        elif i == 0:
+            DP_4[i][j] = Map[i][j] + DP_4[i][j+1]
+        elif j == c-1:
+            DP_4[i][j] = Map[i][j] + DP_4[i-1][j]
+        else:
+            DP_4[i][j] = Map[i][j] + max(DP_4[i][j+1],DP_4[i-1][j])
+            
+for i in range(1,r-1):
+    for j in range(1,c):
+        if j == c-1:
+            result = max(DP_1[i][j-1] + DP_3[i+1][j] + DP_4[i-1][j], DP_1[i-1][j] + DP_2[i+1][j] + DP_3[i][j-1],result)
+        else:
+            result = max(DP_1[i][j-1] + DP_2[i][j+1] + DP_3[i+1][j] + DP_4[i-1][j], DP_1[i-1][j] + DP_2[i+1][j] + DP_3[i][j-1] + DP_4[i][j+1],result)
+
+
+print(result)
