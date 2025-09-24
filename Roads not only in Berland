@@ -1,0 +1,39 @@
+class DSU:
+    def __init__(self,n):
+        self.Parent = [i for i in range(n+1)]
+        self.size = [1 for i in range(n+1)]
+    
+    def find(self,a):
+        if self.Parent[a] == a:
+            return a
+        return self.find(self.Parent[a])
+    
+    def union(self,a,b):
+        A = self.find(a)
+        B = self.find(b)
+        if A == B:
+            return False
+        if self.size[A] < self.size[B]:
+            A,B = B,A
+        self.Parent[B] = A
+        self.size[A] += self.size[B]
+        return True
+    
+n = int(input())
+dsu = DSU(n)
+extra_edge = []
+for _ in range(n-1):
+    u,v = map(int,input().split())
+    if not dsu.union(u,v):
+        extra_edge.append((u,v))
+
+leader = []
+for i in range(1,n+1):
+    if dsu.find(i) == i:
+        leader.append(i)
+
+print(len(leader)-1)
+for i in range(len(leader)-1):
+    u,v = extra_edge[i]
+    x,y = leader[i],leader[i+1]
+    print(u,v,x,y)
