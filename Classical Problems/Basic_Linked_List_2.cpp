@@ -93,19 +93,42 @@ void reverse(Node* &head){
    head = previous;
 }
 
+bool detect_cycle(Node* head){
+   if(head == nullptr){
+      return false;
+   }
+
+   Node* slow = head;
+   Node*fast = head;
+   while(fast != nullptr && fast->next != nullptr){
+      slow = slow->next;
+      fast = fast->next->next;
+      if(slow == fast){
+         return true;
+      }
+   }
+   return false;
+}
 
 int main(){
    Node* head = new Node;
    Node* node1 = new Node;
    Node* node2 = new Node;
+   Node* node3 = new Node;
+   Node* node4 = new Node;
 
    head->data = 1;
    node1->data = 2;
    node2->data = 3;
+   node3->data = 4;
+   node4->data = 5;
 
    head->next = node1;
    node1->next = node2;
-   node2->next = nullptr;
-   reverse(head);
-   traversal(head);
+   node2->next = node3;
+   node3->next = node4;
+   node4->next = node3;
+
+   cout<<detect_cycle(head);
+   
 }
